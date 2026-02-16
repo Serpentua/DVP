@@ -1,0 +1,117 @@
+{% extends "layout.html" %}S
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="tab col-md-10"> Assets Groups / <a class="tabLink text-decoration-none" href="{{ url_for('assets', id=assetgroup.id) }}"> {{assetgroup.name}} </a> / <a class="tabLink text-decoration-none" href="{{ url_for('assetobject', id=parentasset.id) }}">{{parentasset.name}}</a> </div>
+    <div class="tabsubtext col-md-2">{{assetgroup.dateCreated}}</div>
+</div>
+<hr />
+<div class="row ">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header">
+                {{parentasset.name}}
+            </div>
+            <div class="card-body">
+                <p class="card-text"><b>Created: </b>{{parentasset.dateCreated}}</p>
+                <p class="card-text"><b>Full Path: </b>{{parentasset.path}}</p>
+                <p class="card-text"><b>Checksum Schedule: </b>{{parentasset.schedules.name}}</p>
+                <p class="card-text"><b>Associated Asset Group: </b><a class="tabLink text-decoration-none" href="{{ url_for('assets', id=assetgroup.id) }}"> {{assetgroup.name}} </a></p>
+                <p class="card-text"><b>External Identifier: </b>{{parentasset.externalAssetID}}</p>
+
+                <p class="card-text">
+                    <a href="{{ url_for('editasset', id=parentasset.id) }}" class="tabLink text-decoration-none">Edit</a>
+                    <a class="tabLink link-danger text-decoration-none " style="padding-left:10px;" href="{{ url_for('deleteasset', id=parentasset.id) }}">Remove</a>
+                </p>
+            </div>
+            
+            
+
+        </div>
+    </div>
+</div>
+
+    <div class="row" style="padding-top:20px;">
+        <div class="col-md-10">
+            <form class="input-group input-group-sm" method="post" role="form">
+                {{ searchform.hidden_tag() }}
+                {{ wtf.form_errors(searchform, hiddens="only") }}
+
+                {{ searchform.searchfield }}
+                {{ searchform.search }}
+            </form>
+        </div>
+        <div class="col-md-10">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">File Name</th>
+                        <th scope="col">Path</th>
+                        <th scope="col">SHA256 Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for assetobjectitem in childassetobjects.items %}
+                    <tr>
+
+                        <td> <a class="text-decoration-none" href="{{ url_for('ojbectvalidations', id=assetobjectitem.id) }}"> {{assetobjectitem.fileName}}</a> </td>
+                        <td>{{assetobjectitem.path }}</td>
+                        <td>{{assetobjectitem.checksumValue }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+
+
+
+
+            <!-- Pagination Links-->
+            <div class="text-right">
+                <a href="{{ url_for('assetobject', id=parentasset.id, page=childassetobjects.prev_num) }}"
+                   class="btn btn-sm btn-outline-dark
+                {% if childassetobjects.page == 1 %}disabled{% endif %}">
+                    &laquo;
+                </a><!-- Loop through the number of pages to display a link for each-->
+                {% for page_num in childassetobjects.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}{% if page_num %}
+                <!-- Check for the active page and set the link to "Active"-->
+                {% if childassetobjects.page == page_num %}
+                <a href="{{ url_for('assetobject', id=parentasset.id, page=page_num) }}"
+                   class="btn btn-sm btn-dark">
+                    {{ page_num }}
+                </a>
+                {% else %}
+                <a href="{{ url_for('assetobject', id=parentasset.id, page=page_num) }}"
+                   class="btn btn-sm btn-outline-dark">
+                    {{ page_num }}
+                </a>
+                {% endif %}
+                {% else %}
+                ...
+                {% endif %}
+                {% endfor %}    <a href="{{ url_for('assetobject', id=parentasset.id, page=childassetobjects.next_num) }}"
+                                   class="btn btn-sm btn-outline-dark
+       {% if childassetobjects.page == childassetobjects.pages %}disabled{% endif %}">
+                    &raquo;
+                </a>
+            </div>
+            <p class="text-right mt-3">
+                Showing page {{ childassetobjects.page }} of {{ childassetobjects.pages }}
+            </p>
+
+
+
+
+
+
+
+
+        </div>
+    </div>
+    {% endblock %}

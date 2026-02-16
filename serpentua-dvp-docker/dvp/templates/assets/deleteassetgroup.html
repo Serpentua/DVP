@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+
+
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+
+</div>
+
+<div class="row ">
+    <div class="col-md-8">
+        <div class="shadow card">
+            <div class="card-header">Remove Group: {{selectedassetgroup.name}}</div>
+
+
+            <div class="card-body text-center">
+                Are you sure you want to remove <b>"{{selectedassetgroup.name}}"</b> and its assets from the database? This will also remove the asset's objects.
+
+                <div style="padding-top:10px;">
+                    <a class="btn btn-danger btn-sm" style="margin-right:10px;" href="{{ url_for('confirmedgroupdelete', id=selectedassetgroup.id) }}">Remove</a>
+                    <a class="btn btn-secondary btn-sm" href="{{ url_for('assetgroups') }}">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>          
+{% endblock %}

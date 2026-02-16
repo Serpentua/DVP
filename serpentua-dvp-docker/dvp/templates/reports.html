@@ -1,0 +1,77 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="shadow card">
+            <div class="card-header">
+                Export Asset Object History
+            </div>
+            <div class="card-body">
+                <p>Input Asset Object ID</p>
+                <form class="input-group input-group-sm" method="post" role="form">
+                    {{ aobjform.hidden_tag() }}
+                    {{ wtf.form_errors(aobjform, hiddens="only") }}
+
+                    {{ aobjform.objid }}
+                    {{ aobjform.submit }}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="padding-top:20px;">
+    <div class="col-md-6">
+        <div class="shadow card">
+            <div class="card-header">
+                Export All System Messages
+            </div>
+            <div class="card-body">
+                <p class="card-text">This will export all internal system messages as seen on the dashboard.</p>
+
+                <form class="input-group input-group-sm" method="post" role="form">
+                    <a href="{{ url_for('genalertsreport')}}" class="btn-primary btn-sm" style="text-decoration:none;">Generate</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="padding-top:20px;">
+    <div class="col-md-6">
+        <div class="shadow card">
+            <div class="card-header">
+                Export All Failed Validations
+            </div>
+            <div class="card-body">
+                <p class="card-text">This will export all of the failed validations in the system</p>
+
+                <form class="input-group input-group-sm" method="post" role="form">
+                    <a href="{{ url_for('genfailassobjreport')}}" class="btn-primary btn-sm" style="text-decoration:none;">Generate</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="padding-top:20px;">
+    <div class="col-md-6">
+        <div class="shadow card">
+            <div class="card-header">
+                Export All Deleted Objects
+            </div>
+            <div class="card-body">
+                <p class="card-text">This will export all of the deleted file objects in the system</p>
+
+                <form class="input-group input-group-sm" method="post" role="form">
+                    <a href="{{ url_for('gendeletedreport')}}" class="btn-primary btn-sm" style="text-decoration:none;">Generate</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+        {% endblock %}

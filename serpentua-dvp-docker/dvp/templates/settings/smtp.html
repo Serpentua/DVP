@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="shadow card" >
+            <div class="card-header">SMTP Settings</div>
+            <div class="card-body">
+
+
+
+
+                <div class="row" style="padding:20px;">
+                    <b>Global Email Settings</b>
+                    <hr />
+                    <div class="col-auto form-check" style="padding: 20px; width: 50%; float: left;">
+                        <label class="form-check-label">Enable Email Notifications: </label>
+                        {{ smtp.emailEnabled }}
+                    </div>
+
+                </div>
+
+                <div class="row" style="padding:20px;">
+                    <b>Server Settings</b>
+                    <hr />
+                    <div class="col-auto" style="padding: 20px; width: 50%; float: left;">
+                        <label class="form-label">Server Address:</label>
+                        {{ smtp.emailserver }}
+                    </div>
+                    <div class="col-auto" style="padding:20px; width:50%; float:left;">
+                        <label class="form-label">Server Port:</label>
+                        {{ smtp.port }}
+                    </div>
+                    <div class="mb-6 form-check" style="padding:20px;">
+                        <label class="form-check-label">TLS: </label>
+                        {{ smtp.tls }}
+                    </div>
+                </div>
+
+
+
+                <div class="row" style="padding:20px;">
+                    <b>Server Credentials</b>
+                    <hr />
+                    <div class="col-auto form-check" style="padding: 20px; width: 50%; float: left;">
+                        <label class="form-label">Server UserName:</label>
+                        {{ smtp.username }}
+                    </div>
+
+                </div>
+
+                <p><a class="text-decoration-none" href="{{ url_for('editemail') }}">Edit</a></p>
+                <p><button class="text-decoration-none" href="{{ url_for('sendtestemail') }}">Send test email</button></p>
+
+            </div>
+
+
+       </div>
+    </div>
+</div>
+
+{% endblock %}

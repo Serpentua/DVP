@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="tab col-md-10"> Assets Groups / <a class="tabLink" href="{{ url_for('assets', id=assetgroup.id) }}"> {{assetgroup.name}} </a> / <a class="tabLink" href="{{ url_for('assetobject', id=parentasset.id) }}">{{parentasset.name}}</a> / <a class="tabLink" href="{{ url_for('ojbectvalidations', id=parentassetobject.id) }}">{{parentassetobject.fileName}}</a> </div>
+    <div class="tabsubtext col-md-2">{{assetgroup.dateCreated}} - {{assetgroup.createdBy}}</div>
+</div>
+<hr />
+
+
+<div class="row ">
+    <div class="col-md-8">
+        <div class="shadow card">
+            <div class="card-header">
+            {{parentassetobject.fileName}}
+            </div>
+            <div class="card-body">
+                <p class="card-text"><b>Asset Object ID: </b>{{parentassetobject.id}}</p>
+                <p class="card-text"><b>Created: </b>{{parentassetobject.dateCreated}}</p>
+                <p class="card-text"><b>Full Path: </b>{{parentassetobject.path}}</p>
+                <p class="card-text"><b>File Size: </b>{{ parentassetobject.sizeMB | filesizeformat(true) }} </p> 
+                <p class="card-text"><b>Extension:</b>{{parentassetobject.assetextension}}</p>
+                <p class="card-text"><b>Original Checksum Value: </b>{{parentassetobject.checksumValue}}</p>
+                <a href="{{ url_for('revalidate', id=parentassetobject.id) }}" class="tabLink text-decoration-none">Regenerate Asset Object Checksum</a>
+            </div>
+                   
+        </div>
+    </div>
+</div>
+
+            <div class="row">
+                <div class="col-md-10">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">SHA256 Value</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for result in checksumResults.items %}
+                            <tr>
+                                <td>{{result.dateCreated }}</td>
+                                <td>{{result.result }}</td>
+                                <td>
+                                    {% if result.status == True %}
+                                    <b style="color:green">Passed</b>
+                                    {% else %}
+                                    <b style="color:darkred">Failed</b>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+
+
+
+
+                    <!-- Pagination Links-->
+                    <div class="text-right">
+                        <a href="{{ url_for('ojbectvalidations', id=parentassetobject.id, page=checksumResults.prev_num) }}"
+                           class="btn btn-sm btn-outline-dark
+                            {% if checksumResults.page == 1 %}disabled{% endif %}">
+                            &laquo;
+                        </a><!-- Loop through the number of pages to display a link for each-->
+                        {% for page_num in checksumResults.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}{% if page_num %}
+                        <!-- Check for the active page and set the link to "Active"-->
+                        {% if checksumResults.page == page_num %}
+                        <a href="{{ url_for('ojbectvalidations', id=parentassetobject.id, page=page_num) }}"
+                           class="btn btn-sm btn-dark">
+                            {{ page_num }}
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('ojbectvalidations', id=parentassetobject.id, page=page_num) }}"
+                           class="btn btn-sm btn-outline-dark">
+                            {{ page_num }}
+                        </a>
+                        {% endif %}
+                        {% else %}
+                        ...
+                        {% endif %}
+                        {% endfor %}    <a href="{{ url_for('ojbectvalidations', id=parentassetobject.id, page=checksumResults.next_num) }}"
+                                           class="btn btn-sm btn-outline-dark
+                        {% if checksumResults.page == checksumResults.pages %}disabled{% endif %}">
+                            &raquo;
+                        </a>
+                    </div>
+                    <p class="text-right mt-3">
+                        Showing page {{ checksumResults.page }} of {{ checksumResults.pages }}
+                    </p>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+            {% endblock %}

@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-dvp_app}
+      MYSQL_USER: ${DB_USER:-dvp}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-ChangeMe!123}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8443:8443"
+    environment:
+      SERVER_HOST: "0.0.0.0"
+      SERVER_PORT: "8443"
+      DB_USER: ${DB_USER:-dvp}
+      DB_PASSWORD: ${DB_PASSWORD:-ChangeMe!123}
+      DB_NAME: ${DB_NAME:-dvp_app}
+      DB_HOST: db
+    volumes:
+      - /:/host:ro
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  mysql_data:

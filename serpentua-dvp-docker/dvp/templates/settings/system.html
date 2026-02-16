@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="shadow card">
+            <div class="card-header">System Time Settings - Time settings are currently controlled by the operating system.</div>
+            <div class="card-body">  
+                <h6>Time Zone:</h6>
+                <p>{{timezone}}</p>
+                <hr />
+                <h6>Current System Time:</h6>
+                <p>{{currenttime}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div class="row" style="padding-top:20px;">
+                    <div class="col-md-6">
+                        <div class="shadow card">
+                            <div class="card-header">Daily Schedule Settings</div>
+                            <div class="card-body">
+
+                                <div class="col-auto">
+                                    <h6>New Scan Time:</h6>
+                                    <form class="input-group input-group-sm" method="post" role="form">
+                                        {{ form.hidden_tag() }}
+                                        {{ wtf.form_errors(form, hiddens="only") }}
+
+                                        {{ form.starttime }}
+                                        {{ form.submit }}
+
+                                    </form>
+                                    <div class="col-auto" style="padding-top:10px;">
+                                        It is recommend to reload the service for changes to take affect.
+                                    </div>
+                                    <hr />
+
+                                    <div class="col-auto">
+                                        <h6>Daily Scan Start Time:</h6> 
+                                        <p>{{parsedTime}}</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endblock %}

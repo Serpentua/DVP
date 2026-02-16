@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="shadow card">
+            <div class="card-header">License Information</div>
+            <div class="card-body">
+                {%if thelicense != None  %}
+                <div class="col-auto">
+                    <p class="card-text"><b>License Key: </b>{{thelicense.licensekey}}</p>
+                    <p class="card-text"><b>InstanceID: </b>{{thelicense.instanceid}}</p>
+                    <p class="card-text"><b>Activated on: </b>{{thelicense.activatedon}}</p>
+
+                </div>
+                <div class="col-auto" style="padding-top:20px;">
+                    <a class="btn btn-sm btn-danger" href="{{ url_for('dellicense') }}" style="padding-left:5px;">Remove license</a>
+                </div>
+                    {% endif %}
+
+                    {% if form != None %}
+                    <div class="col-auto">
+                        <p>You do not have a license applied. Please enter the license information below.</p>
+                    </div>
+                    <div class="col-auto">
+                        <form class="input-group input-group-sm" method="post" role="form">
+                            {{ form.hidden_tag() }}
+                            {{ form.licensekey }}
+                            {{ form.submit }}
+                        </form>
+                        {% endif %}
+
+                        {% if message != None %}
+                        <p style="padding-top:15px;">
+                            {{message}}
+                        </p>
+                        {% if key != None %}
+                        {{key}}
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+{% endblock %}

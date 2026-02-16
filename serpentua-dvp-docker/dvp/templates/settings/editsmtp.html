@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="shadow card">
+            <div class="card-header">SMTP Settings</div>
+            <div class="card-body">
+                <div class="col-auto">
+                    <form method="post" role="form" style="padding:20px;">
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_errors(form, hiddens="only") }}
+                        <div class="row" style="">
+                            <b>Global Email Settings</b>
+                            <hr />
+                            <div class="col-auto form-check" style="padding: 20px; width: 50%; float: left;">
+                                <label class="form-check-label">Enable Email Notifications: </label>
+                                {{ form.emailEnabled }}
+                            </div>
+
+                        </div>
+
+                        <div class="row" style="">
+                            <b>Server Settings</b>
+                            <hr />
+                            <div class="col-auto" style="padding: 20px; width: 50%; float: left;">
+                                <label class="form-label">Server Address:</label>
+                                {{ form.emailserver }}
+                            </div>
+                            <div class="col-auto" style="padding:20px; width:50%; float:left;">
+                                <label class="form-label">Server Port:</label>
+                                {{ form.port }}
+                            </div>
+                            <div class="mb-6 form-check" style="padding:20px;">
+                                <label class="form-check-label">TLS: </label>
+                                {{ form.tls }}
+                            </div>
+                        </div>
+                        
+
+
+                        <div class="row" style="">
+                            <b>Server Credentials</b>
+                            <hr />
+                            <div class="col-auto form-check" style="padding: 20px; width: 50%; float: left;">
+                                <label class="form-label">Server UserName:</label>
+                                {{ form.username }}
+                            </div>
+                            <div class="col-auto form-check" style="padding: 20px; width: 50%; float: left;">
+                                <label class="form-label">Password:</label>
+                                {{ form.password }}
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="col-auto" style="padding-top:27px">
+
+                            {{ form.submit }}
+
+                        </div>
+
+
+
+
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

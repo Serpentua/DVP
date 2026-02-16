@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+
+
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+
+</div>
+
+<div class="row ">
+    <div class="col-md-10">
+        <div class="shadow card">
+            <div class="card-header">Edit: {{selectedasset.name}}</div>
+
+
+            <div class="card-body text-center">
+                <form class="input-group input-group-sm" method="post" role="form">
+                    <div class="form-group">
+                        {{ form.hidden_tag() }}
+                        {{ wtf.form_errors(form, hiddens="only") }}
+                    </div>
+                    <div class="row align-items-center g-3">
+                        <div class="col-auto">
+                            {{ form.name }}
+                        </div>
+                        <div class="col-auto">
+                            {{ form.path }}
+                        </div>
+                        <div class="col-auto">
+                            {{ form.schedules }}
+                        </div>
+                        <div class="col-auto">
+                            {{ form.externalAssetID }}
+                        </div>
+                        <div class="col-auto">
+                            {{ form.submit }}
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>          
+{% endblock %}

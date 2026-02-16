@@ -1,0 +1,165 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<div style="padding-top:20px;" class="row">
+    <div class="col-md-3">
+        <div class="shadow  card text-white bg-primary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Total Assets</div>
+            <div class="card-body">
+                <p class="card-text">{{numofasset}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="shadow card text-white bg-success mb-3" style="max-width: 18rem;">
+            <div class="card-header">Verfications Passed</div>
+            <div class="card-body">
+                <p class="card-text">{{numofpassedassets}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="shadow card text-white bg-danger mb-3" style="max-width: 18rem;">
+            <div class="card-header">Verifcations Failed</div>
+            <div class="card-body">
+                <p class="card-text">{{numoffailedassets}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="padding-top:20px;" class="row">
+    <div class="col-md-10">
+        <div class="shadow card border-danger" style="">
+            <div class="card-header">Alerts - Failed Validations</div>
+            <div class="card-body">
+                <p style="text-align:right;"><a class="text-decoration-none" href="{{ url_for('dismissallak') }}">Dismiss All</a></p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Asset Object</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Path</th>
+
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for failedobject in aknowledgements.items %}
+                        <tr>
+
+                            <td> <a class="text-decoration-none" href="{{ url_for('ojbectvalidations', id=failedobject.linkedassetobject.id) }}"> {{failedobject.linkedassetobject.fileName}}</a> </td>
+                            <td>{{failedobject.lastcheck.dateCreated }}</td>
+                            <td>{{failedobject.linkedassetobject.path }}</td>
+
+                            <td><a class="text-decoration-none" href="{{ url_for('dismiss', id=failedobject.id) }}">Dismiss</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% if aknowledgements != None %}
+                    <!-- Pagination Links-->
+                    <div class="text-right">
+                        <a href="{{ url_for('home', page=aknowledgements.prev_num) }}"
+                           class="btn btn-sm btn-outline-dark
+                        {% if aknowledgements.page == 1 %}disabled{% endif %}">
+                            &laquo;
+                        </a><!-- Loop through the number of pages to display a link for each-->
+                        {% for page_num in aknowledgements.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}{% if page_num %}
+                        <!-- Check for the active page and set the link to "Active"-->
+                        {% if aknowledgements.page == page_num %}
+                        <a href="{{ url_for('home', page=page_num) }}"
+                           class="btn btn-sm btn-dark">
+                            {{ page_num }}
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('home', page=page_num) }}"
+                           class="btn btn-sm btn-outline-dark">
+                            {{ page_num }}
+                        </a>
+                        {% endif %}
+                        {% else %}
+                        ...
+                        {% endif %}
+                        {% endfor %}    <a href="{{ url_for('home', page=aknowledgements.next_num) }}"
+                                           class="btn btn-sm btn-outline-dark
+                        {% if aknowledgements.page == aknowledgements.pages %}disabled{% endif %}">
+                            &raquo;
+                        </a>
+                    </div>
+                    <p class="text-right mt-3">
+                        Showing page {{ aknowledgements.page }} of {{ aknowledgements.pages }}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div style="padding-top:20px;" class="row">
+    <div class="col-md-10">
+        <div class="shadow card" style="">
+            <div class="card-header">Internal Messages</div>
+            <div class="card-body">
+                {% if internalmessages != None %}
+                <p style="text-align:right;"><a class="text-decoration-none" href="{{ url_for('dismissallalerts') }}">Dismiss All</a></p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Message</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for message in internalmessages.items %}
+                        <tr>
+
+                            <td>{{message.message}}</a> </td>
+                            <td>{{message.dateCreated }}</td>
+                            <td><a class="text-decoration-none" href="{{ url_for('dismissmessage', id=message.id) }}">Dismiss</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% endif %}
+
+                {% if internalmessages != None %}
+                <!-- Pagination Links-->
+                <div class="text-right">
+                    <a href="{{ url_for('home', page=internalmessages.prev_num) }}"
+                       class="btn btn-sm btn-outline-dark
+                        {% if internalmessages.pagemes == 1 %}disabled{% endif %}">
+                        &laquo;
+                    </a><!-- Loop through the number of pages to display a link for each-->
+                    {% for pagenum in internalmessages.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}{% if pagenum %}
+                    <!-- Check for the active page and set the link to "Active"-->
+                    {% if internalmessages.pagemes == pagenum %}
+                    <a href="{{ url_for('home', pagemes=pagenum) }}"
+                       class="btn btn-sm btn-dark">
+                        {{ pagenum }}
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('home', pagemes=pagenum) }}"
+                       class="btn btn-sm btn-outline-dark">
+                        {{ pagenum }}
+                    </a>
+                    {% endif %}
+                    {% else %}
+                    ...
+                    {% endif %}
+                    {% endfor %}    <a href="{{ url_for('home', pagemes=internalmessages.next_num) }}"
+                                       class="btn btn-sm btn-outline-dark
+                        {% if internalmessages.pagemes == internalmessages.pagemes %}disabled{% endif %}">
+                        &raquo;
+                    </a>
+                </div>
+                <p class="text-right mt-3">
+                    Showing page {{ internalmessages.pagemes }} of {{ internalmessages.pages }}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+                {% endblock %}

@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+
+<div class="row" style="padding-top:10px;">
+    <h6>{{ title }}</h6>
+    <hr />
+</div>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="shadow card">
+            <div class="card-header">Organization</div>
+            <div class="card-body">     
+                    <div class="col-auto">
+                        <form class="input-group input-group-sm" method="post" role="form">
+                            {{ form.hidden_tag() }}
+                            {{ wtf.form_errors(form, hiddens="only") }}
+                            <div class="row" style="padding-top:20px;">
+                                <div class="col-auto">
+                                    <h6>Organization Name:</h6>
+                                    {{ form.orgname }}
+                                </div>
+                                <div class="col-auto" style="padding-left:20px;">
+                                    <h6>Phone Number:</h6>
+                                    {{ form.orgphone }}
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:20px;">
+                                <div class="col-auto">
+                                    <h6>Address line 1:</h6>
+                                    {{ form.orgadd1 }}
+                                </div>
+                                <div class="col-auto">
+                                    <h6>Address line 2:</h6>
+                                    {{ form.orgadd2 }}
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:20px;">
+                                <div class="col-auto">
+                                    <h6>City:</h6>
+                                    {{ form.orgcity }}
+                                </div>
+                                <div class="col-auto">
+                                    <h6>State:</h6>
+                                    {{ form.orgstate }}
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:20px;">
+                                <div class="col-auto">
+                                    <h6>Postal Code:</h6>
+                                    {{ form.orgpostal }}
+                                </div>
+
+                                <div class="col-auto" style="padding-top:27px">
+
+                                    {{ form.submit }}
+
+                                </div>
+                            </div>
+
+
+
+                        </form>
+                    </div>
+         
+                </div>
+
+            </div>
+    </div>
+</div>
+
+{% endblock %}
