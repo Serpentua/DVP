@@ -210,83 +210,35 @@ def checkIfAssetObjectDeleted():
 
 def routineScan():
   with app.app_context():
-    checklicense = license.query.get(1)
-    if checklicense is None:
-        startalert = 'Scheduled Validation Job aborted. Please check your license.'
-        sendmessagetodb(startalert)
-    if checklicense is not None:
-        if checklicense.active is True:
-            if checklicense.cap == 0:
-                startalert = 'Scheduled Validation Job Started'
-                sendmessagetodb(startalert)
-                allassetobjects = assetobjects.query.all()
-                scancounter = 0 
-                for assetobject in allassetobjects:
-                    if not assetobject.deleted:
-                        parentasset = asset.query.get(assetobject.asset_id)
-                        assetobjectspan = sched.query.get(parentasset.sched_id)     
-                        allcheck = checksumresults.query.filter_by(file_id=assetobject.id)
-                        lastcheck = allcheck[-1]
-                        nextscandate = lastcheck.dateCreated + timedelta(days=assetobjectspan.span)
-                        getnow = datetime.now().date()
-                        nextscan = nextscandate.date()
-                        if getnow >= nextscan:
-                            isValid = True
-                            checksum = checkSum256(assetobject.path)
-                            if checksum != assetobject.checksumValue:
-                                isValid = False
-                            newcheck = checksumresults(assetobject.id, datetime.now(), checksum, isValid)     
-                            db.session.add(newcheck)
-                            db.session.flush()
-                            if isValid == False:
-                                addaknow = failedacknowledgement(assetobject.id,newcheck.id, isValid)
-                                newcheck.status = False
-                                db.session.add(addaknow)    
-                            db.session.commit()  
-                            scancounter = scancounter + 1 
-                endalert = 'Scheduled Validation Finished. A total of ' + str(scancounter) + ' validations executed.'
-                sendmessagetodb(endalert)
-            else:
-                x = 0 
-                startalert = 'Scheduled Validation Job Started'
-                sendmessagetodb(startalert)
-                allassetobjects = assetobjects.query.all()
-                scancounter = 0 
-                while x == 0:
-                    y = 0 
-                    limitationgb = checklicense.cap * 1000
-                    for assetobject in allassetobjects:
-                        if y >= limitationgb:
-                            x = 1
-                            endalert = "License Limitation Reached. "
-                        if not assetobject.deleted:
-                            parentasset = asset.query.get(assetobject.asset_id)
-                            assetobjectspan = sched.query.get(parentasset.sched_id)     
-                            allcheck = checksumresults.query.filter_by(file_id=assetobject.id)
-                            lastcheck = allcheck[-1]
-                            nextscandate = lastcheck.dateCreated + timedelta(days=assetobjectspan.span)
-                            getnow = datetime.now().date()
-                            nextscan = nextscandate.date()
-                            if getnow >= nextscan:
-                                isValid = True
-                                checksum = checkSum256(assetobject.path)
-                                filesizegb = os.path.getsize(assetobject.path)/(1024*1024*1024)
-                                y = y + filesizegb
-                                if checksum != assetobject.checksumValue:
-                                    isValid = False
-                                newcheck = checksumresults(assetobject.id, datetime.now(), checksum, isValid)     
-                                db.session.add(newcheck)
-                                db.session.flush()
-                                if isValid == False:
-                                    addaknow = failedacknowledgement(assetobject.id,newcheck.id, isValid)
-                                    newcheck.status = False
-                                    db.session.add(addaknow)    
-                                db.session.commit()  
-                                scancounter = scancounter + 1 
-                                endalert = "License Limited has not been reached."
-                    x = 1
-                endalert = endalert + 'Scheduled Validation Finished. A total of ' + str(scancounter) + ' validations executed.'
-                sendmessagetodb(endalert)    
+    startalert = 'Scheduled Validation Job Started'
+    sendmessagetodb(startalert)
+    allassetobjects = assetobjects.query.all()
+    scancounter = 0
+    for assetobject in allassetobjects:
+        if not assetobject.deleted:
+            parentasset = asset.query.get(assetobject.asset_id)
+            assetobjectspan = sched.query.get(parentasset.sched_id)
+            allcheck = checksumresults.query.filter_by(file_id=assetobject.id)
+            lastcheck = allcheck[-1]
+            nextscandate = lastcheck.dateCreated + timedelta(days=assetobjectspan.span)
+            getnow = datetime.now().date()
+            nextscan = nextscandate.date()
+            if getnow >= nextscan:
+                isValid = True
+                checksum = checkSum256(assetobject.path)
+                if checksum != assetobject.checksumValue:
+                    isValid = False
+                newcheck = checksumresults(assetobject.id, datetime.now(), checksum, isValid)
+                db.session.add(newcheck)
+                db.session.flush()
+                if isValid == False:
+                    addaknow = failedacknowledgement(assetobject.id,newcheck.id, isValid)
+                    newcheck.status = False
+                    db.session.add(addaknow)
+                db.session.commit()
+                scancounter = scancounter + 1
+    endalert = 'Scheduled Validation Finished. A total of ' + str(scancounter) + ' validations executed.'
+    sendmessagetodb(endalert)
 
  
 def emailDailyEvents():
@@ -379,12 +331,11 @@ def startscheduledworkers():
             jobqueue.task_done()
 
     scantime = getscanschedule()
-    schedule.every().day.at(scantime).do(jobqueue.put, verifylicense)
     schedule.every().day.at(scantime).do(jobqueue.put, checkIfAssetObjectDeleted)
     schedule.every().day.at(scantime).do(jobqueue.put, directoryScan)
     schedule.every().day.at(scantime).do(jobqueue.put, removeexcludedfiles)
     schedule.every().day.at(scantime).do(jobqueue.put, routineScan)
-    
+
     worker_thread = threading.Thread(target=worker_main)
     worker_thread.start()
 
