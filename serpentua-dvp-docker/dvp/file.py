@@ -12,7 +12,7 @@ import uuid
 import requests
 
 
-activationsite = "http://maximumlan.com/"
+
 
 
 
@@ -342,4 +342,5 @@ def startscheduledworkers():
     while 1:
         schedule.run_pending()
         time.sleep(60)
+
 
