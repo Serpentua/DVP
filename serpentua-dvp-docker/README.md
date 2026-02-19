@@ -12,7 +12,7 @@ A web-based data validation platform that monitors file integrity through SHA-25
 - **Email Notifications** — SMTP-based alerting with TLS support
 - **File Exclusions** — Exclude specific files or paths from validation scans
 - **Organization Settings** — Store your organization profile for reporting context
-- **License Management** — Activation and verification of license keys
+
 
 ## Tech Stack
 
@@ -101,3 +101,4 @@ The general pattern is: replace the drive letter `X:\` with `/host/mnt/x/` (lowe
 ## License
 
 This software is released under the [Serpentua Source Available License](LICENSE). You are free to use and modify the software, but you may not sell it, offer it as a service, or use it to compete with [Serpentua's](https://serpentua.com) products. See the [LICENSE](LICENSE) file for full terms.
+
