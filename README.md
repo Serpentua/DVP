@@ -12,7 +12,7 @@ A web-based data validation platform that monitors file integrity through SHA-25
 - **Email Notifications** — SMTP-based alerting with TLS support
 - **File Exclusions** — Exclude specific files or paths from validation scans
 - **Organization Settings** — Store your organization profile for reporting context
-- **License Management** — Activation and verification of license keys
+
 
 ## Tech Stack
 
